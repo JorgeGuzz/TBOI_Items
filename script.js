@@ -8,12 +8,7 @@ const MARGIN_BUBBLE = {
 };
 const width_bubble = WIDTH_BUBBLE - MARGIN_BUBBLE.left - MARGIN_BUBBLE.right;
 const height_bubble = HEIGHT_BUBBLE - MARGIN_BUBBLE.top - MARGIN_BUBBLE.bottom;
-const svg_bubble = d3.select("#bubble_vis")
-                        .style("border", "5px solid black")
-                        .style("border-radius", "5px")
-                        .append("svg")
-                        .attr("width", WIDTH_BUBBLE)
-                        .attr("height", HEIGHT_BUBBLE)
+
 
 d3.json("data.json").then((datos) => {
     datos = datos.map(v => ({...v, image_url: `item_${v.ID}.png`}))
@@ -24,6 +19,21 @@ d3.json("data.json").then((datos) => {
     datos.map(obj => {
         vis.append('img').attr('src', `collectibles/${obj["image_url"]}`)
     })
+
+    const svg_bubble = d3.select("#bubble_vis")
+                        .style("border", "5px solid black")
+                        .style("border-radius", "5px")
+                        .append("svg")
+                        .attr("width", WIDTH_BUBBLE)
+                        .attr("height", HEIGHT_BUBBLE)
+
+    const escalaBubble = d3
+        .scalePow()
+        .exponent(1 / 2)
+        .domain([0, d3.max(datos, (d) => d.Quality)])
+        .rangeRound([25, 100]);
+    
+    
     
 });
 
